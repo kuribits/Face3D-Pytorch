@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 
 from dataset import RGBD_Dataset
-from dataset import Resize, RandomHorizontalFlip
+from dataset import Resize#, RandomHorizontalFlip
 from models import ResNet50
 
 
@@ -74,9 +74,9 @@ def evaluation(eval_dataset, pretrained_model_path, batch_size=16, num_of_worker
 
 def parse_arguments(argv):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--test_dataset_csv', type=str,
-                        help='The path of csv file where to write paths of test images.',
-                        default='~/vggface3d_sm/test.csv')
+    parser.add_argument('--eval_dataset_csv', type=str,
+                        help='The path of csv file where to write paths of eval images.',
+                        default='~/vggface3d_sm/eval.csv')
     parser.add_argument('--pretrained_model_path', type=str,
                         help='The path of the pretrained model.')
     parser.add_argument('--input_channels', type=int,
@@ -99,10 +99,10 @@ if __name__ == '__main__':
         transforms.ToTensor(),
     ])
 
-    test_dataset = RGBD_Dataset(args.test_dataset_csv,
+    eval_dataset = RGBD_Dataset(args.eval_dataset_csv,
                                 input_channels=args.input_channels,
                                 transform=eval_transform)
 
-    acc, loss = evaluation(test_dataset, batch_size=args.batch_size,
+    acc, loss = evaluation(eval_dataset, batch_size=args.batch_size,
                            num_of_workers=args.num_of_workers,
                            pretrained_model_path=args.pretrained_model_path)
